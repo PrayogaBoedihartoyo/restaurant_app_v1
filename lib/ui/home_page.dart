@@ -158,16 +158,16 @@ class _HomePageState extends State<HomePage> {
                   if (state != ConnectionState.done) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasData) {
+                    if (snapshot.data!.restaurants.isEmpty) {
+                      return const Center(child: Text('No Data'));
+                    }
                     return ListView(
                       children: snapshot.data!.restaurants.map((restaurant) {
                         return listItem(restaurant);
                       }).toList(),
                     );
-                  } else if (snapshot.hasError) {
-                    print('Error: ${snapshot.error.toString()}');
-                    return Center(child: Text(snapshot.error.toString()));
                   } else {
-                    return const Center(child: Text('Empty Data'));
+                    return Center(child: Text(snapshot.error.toString()));
                   }
                 },
               ),

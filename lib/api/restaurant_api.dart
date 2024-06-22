@@ -12,11 +12,11 @@ Future<Restaurants> fetchRestaurants() async {
   }
 }
 
-Future<Restaurant> detailRestaurant(String id) async {
+Future<RestaurantDetail> detailRestaurantDetail(String id) async {
   final response = await http.get(Uri.parse(
       'https://restaurant-api.dicoding.dev/detail/$id'));
   if (response.statusCode == 200) {
-    return Restaurant.fromJson(json.decode(response.body));
+    return RestaurantDetail.fromJson(json.decode(response.body));
   } else {
     throw Exception('Failed to load restaurant');
   }

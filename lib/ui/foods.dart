@@ -6,6 +6,20 @@ class Foods {
   final int price;
 
   Foods({required this.name, required this.image, required this.price});
+
+  factory Foods.fromJson(Map<String, dynamic> json) {
+    return Foods(
+      name: json["name"],
+      image: json["image"] ?? "https://restaurant-api.dicoding.dev/images/medium/14",
+      price: json["price"] ?? 22000,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    "name": name,
+    "image": image,
+    "price": price,
+  };
 }
 
 class FoodCarousel extends StatelessWidget {

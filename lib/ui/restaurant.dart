@@ -1,9 +1,8 @@
-import 'dart:math';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/model/restaurant.dart';
-import 'foods.dart';
+import 'package:restaurant_app/ui/foods.dart';
+
+import '../api/restaurant_api.dart';
 
 class DetailPage extends StatefulWidget {
   final Restaurant restaurant;
@@ -14,52 +13,36 @@ class DetailPage extends StatefulWidget {
   State<DetailPage> createState() => _DetailPageState();
 }
 
-Future<Restaurant> detailRestaurant(String id) async {
-  final response = await http.get(Uri.parse(
-      'https://restaurant-api.dicoding.dev/detail/$id'));
-  if (response.statusCode == 200) {
-    return Restaurant.fromJson(json.decode(response.body));
-  } else {
-    throw Exception('Failed to load restaurant');
-  }
-}
-
 class _DetailPageState extends State<DetailPage> {
   bool showFullDescription = false;
+  RestaurantDetail? futureRestaurant;
 
-  // List<Foods> foodList() {
-  //   List<Foods> foodList = [];
-  //   for (var i = 0; i < widget.restaurant.menus[foods].length; i++) {
-  //     foodList.add(Foods(
-  //         name: widget.restaurant['menus']['foods'][i]['name'],
-  //         image: widget.restaurant['pictureId'],
-  //         price: Random().nextInt(10)));
-  //   }
-  //   return foodList;
-  // }
-  //
-  // List<Foods> drinkList() {
-  //   List<Foods> drinkList = [];
-  //   for (var i = 0; i < widget.restaurant['menus']['drinks'].length; i++) {
-  //     drinkList.add(Foods(
-  //         name: widget.restaurant['menus']['drinks'][i]['name'],
-  //         image: widget.restaurant['pictureId'],
-  //         price: Random().nextInt(10)));
-  //   }
-  //   return drinkList;
-  // }
+  @override
+  void initState() {
+    super.initState();
+    detailFetch();
+  }
+
+  Future<void> detailFetch() async{
+    final future = detailRestaurantDetail(widget.restaurant.id);
+    future.then((value) {
+      setState(() {
+        futureRestaurant = value;
+      });
+    });
+  }
 
   Widget header(BuildContext context) {
     return SafeArea(
         child: Hero(
-      tag: widget.restaurant.id,
+      tag: widget.restaurant.toString(),
       child: Container(
         width: double.infinity,
         height: 300,
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(30)),
           image: DecorationImage(
-            image: NetworkImage(widget.restaurant.pictureId),
+            image: NetworkImage('https://restaurant-api.dicoding.dev/images/small/${widget.restaurant.pictureId}'),
             fit: BoxFit.cover,
           ),
         ),
@@ -141,7 +124,7 @@ class _DetailPageState extends State<DetailPage> {
             ),
           ),
           const SizedBox(height: 20),
-          // FoodCarousel(foodList: foodList()),
+          FoodCarousel(foodList: futureRestaurant?.restaurants.menus?.foods ?? []),
           const SizedBox(height: 20),
           const Text(
             'Drinks',

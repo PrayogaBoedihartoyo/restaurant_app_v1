@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Restauran App',
+            'Restaurants App',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
           const SizedBox(height: 10),
@@ -88,7 +88,7 @@ class _HomePageState extends State<HomePage> {
         child: Row(
           children: [
             Hero(
-              tag: restaurant.id.toString() ?? '-',
+              tag: restaurant.id.toString(),
               child: Container(
                 width: 100,
                 height: 100,

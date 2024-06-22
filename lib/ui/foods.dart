@@ -4,6 +4,7 @@ import '../model/restaurant.dart';
 class FoodCarousel extends StatelessWidget {
   final Restaurant? restaurant;
   final List<Foods> foodList;
+
   const FoodCarousel({Key? key, required this.foodList, this.restaurant}) : super(key: key);
 
   @override
@@ -32,6 +33,7 @@ class FoodsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(right: 20),
+      width: 120,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -52,6 +54,7 @@ class FoodsCard extends StatelessWidget {
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           const SizedBox(height: 5),

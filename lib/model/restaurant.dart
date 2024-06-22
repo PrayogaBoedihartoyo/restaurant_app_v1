@@ -1,5 +1,3 @@
-import 'package:restaurant_app/ui/foods.dart';
-
 class Restaurants {
   final bool error;
   final List<Restaurant> restaurants;
@@ -17,6 +15,32 @@ class Restaurants {
   Map<String, dynamic> toJson() => {
     "error": error,
     "restaurants": List<dynamic>.from(restaurants.map((x) => x.toJson())),
+  };
+}
+
+class Foods {
+  final String name;
+  final String image;
+  final int price;
+
+  Foods({
+    required this.name,
+    required this.image,
+    required this.price,
+  });
+
+  factory Foods.fromJson(Map<String, dynamic> json) {
+    return Foods(
+      name: json["name"],
+      image: json["image"] ?? "https://restaurant-api.dicoding.dev/images/medium/14",
+      price: json["price"] ?? 22000,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    "name": name,
+    "image": image,
+    "price": price,
   };
 }
 
@@ -74,13 +98,9 @@ class Restaurant {
       city: json['city'] ?? 'Unknown',
       rating: (json['rating'] ?? 0).toDouble(),
       address: json['address'] ?? '',
-      categories: json['categories'] != null
-          ? List<Category>.from(json['categories'].map((x) => Category.fromJson(x)))
-          : null,
+      categories: json['categories'] != null ? List<Category>.from(json['categories'].map((x) => Category.fromJson(x))) : null,
       menus: json['menus'] != null ? Menus.fromJson(json['menus']) : null,
-      customerReviews: json['customerReviews'] != null
-          ? List<CustomerReview>.from(json['customerReviews'].map((x) => CustomerReview.fromJson(x)))
-          : null,
+      customerReviews: json['customerReviews'] != null ? List<CustomerReview>.from(json['customerReviews'].map((x) => CustomerReview.fromJson(x))) : null,
     );
   }
 
@@ -107,6 +127,7 @@ class Category {
   factory Category.fromJson(Map<String, dynamic> json) => Category(
     name: json["name"],
   );
+
   Map<String, dynamic> toJson() => {
     "name": name,
   };

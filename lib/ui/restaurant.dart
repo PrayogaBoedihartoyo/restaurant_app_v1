@@ -23,7 +23,7 @@ class _DetailPageState extends State<DetailPage> {
     detailFetch();
   }
 
-  Future<void> detailFetch() async{
+  Future<void> detailFetch() async {
     final future = detailRestaurantDetail(widget.restaurant.id);
     future.then((value) {
       setState(() {
@@ -42,7 +42,8 @@ class _DetailPageState extends State<DetailPage> {
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(30)),
           image: DecorationImage(
-            image: NetworkImage('https://restaurant-api.dicoding.dev/images/small/${widget.restaurant.pictureId}'),
+            image: NetworkImage(
+                'https://restaurant-api.dicoding.dev/images/small/${widget.restaurant.pictureId}'),
             fit: BoxFit.cover,
           ),
         ),
@@ -124,7 +125,9 @@ class _DetailPageState extends State<DetailPage> {
             ),
           ),
           const SizedBox(height: 20),
-          FoodCarousel(foodList: futureRestaurant?.restaurants.menus?.foods ?? []),
+          FoodCarousel(
+              foodList: futureRestaurant?.restaurants.menus?.foods ?? [],
+              restaurant: futureRestaurant?.restaurants),
           const SizedBox(height: 20),
           const Text(
             'Drinks',
@@ -134,7 +137,9 @@ class _DetailPageState extends State<DetailPage> {
             ),
           ),
           const SizedBox(height: 20),
-          // FoodCarousel(foodList: drinkList()),
+          FoodCarousel(
+              foodList: futureRestaurant?.restaurants.menus?.drinks ?? [],
+              restaurant: futureRestaurant?.restaurants),
         ],
       ),
     );

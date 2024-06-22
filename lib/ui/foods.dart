@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import '../model/restaurant.dart';
 
 class FoodCarousel extends StatelessWidget {
+  final Restaurant? restaurant;
   final List<Foods> foodList;
-
-  const FoodCarousel({Key? key, required this.foodList}) : super(key: key);
+  const FoodCarousel({Key? key, required this.foodList, this.restaurant}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class FoodCarousel extends StatelessWidget {
         children: foodList
             .asMap()
             .entries
-            .map((MapEntry map) => FoodsCard(info: foodList[map.key]))
+            .map((MapEntry map) => FoodsCard(info: foodList[map.key], pictureId: restaurant!.pictureId))
             .toList(),
       ),
     );
@@ -24,8 +24,9 @@ class FoodCarousel extends StatelessWidget {
 
 class FoodsCard extends StatelessWidget {
   final Foods info;
+  final String pictureId;
 
-  const FoodsCard({Key? key, required this.info}) : super(key: key);
+  const FoodsCard({Key? key, required this.info, required this.pictureId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,7 @@ class FoodsCard extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               image: DecorationImage(
-                image: NetworkImage(info.image),
+                image: NetworkImage('https://restaurant-api.dicoding.dev/images/small/$pictureId'),
                 fit: BoxFit.cover,
               ),
             ),

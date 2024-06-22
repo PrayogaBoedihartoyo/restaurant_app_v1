@@ -1,3 +1,5 @@
+import 'dart:math';
+
 class Restaurants {
   final bool error;
   final List<Restaurant> restaurants;
@@ -33,7 +35,7 @@ class Foods {
     return Foods(
       name: json["name"],
       image: json["image"] ?? "https://restaurant-api.dicoding.dev/images/medium/14",
-      price: json["price"] ?? 22000,
+      price: json["price"] ?? Random().nextInt(100),
     );
   }
 
@@ -46,15 +48,18 @@ class Foods {
 
 class RestaurantDetail {
   final bool error;
+  final String message;
   final Restaurant restaurants;
 
   RestaurantDetail({
     required this.error,
+    required this.message,
     required this.restaurants,
   });
 
   factory RestaurantDetail.fromJson(Map<String, dynamic> json) => RestaurantDetail(
     error: json["error"],
+    message: json["message"],
     restaurants: Restaurant.fromJson(json["restaurant"]),
   );
 

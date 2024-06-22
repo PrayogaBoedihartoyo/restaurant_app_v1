@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
                 onPressed: _searchRestaurants,
               ),
             ),
-            onSubmitted: (value) => _searchRestaurants(),
+            onChanged: (value) => _searchRestaurants(),
           ),
         ],
       ),
@@ -167,7 +167,7 @@ class _HomePageState extends State<HomePage> {
                       }).toList(),
                     );
                   } else {
-                    return Center(child: Text(snapshot.error.toString()));
+                    return const Center(child: Text('BELI KUOTA DI VIA PULSA !!!'));
                   }
                 },
               ),

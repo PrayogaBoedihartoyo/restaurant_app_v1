@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:restaurant_app/ui/restaurant.dart';
-import '../api/restaurant_api.dart';
 import '../model/restaurant.dart';
+import '../provider/restaurant_provider.dart';
 
 class HomePage extends StatefulWidget {
   static const nameRoute = '/';
@@ -13,21 +14,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late Future<Restaurants> _restaurants;
   final TextEditingController _searchController = TextEditingController();
-  String _query = '';
 
   @override
   void initState() {
     super.initState();
-    _restaurants = fetchRestaurants();
+    Future.microtask(() =>
+        Provider.of<RestaurantProvider>(context, listen: false).fetchRestaurantsProvider());
   }
 
-  void _searchRestaurants() {
-    setState(() {
-      _query = _searchController.text;
-      _restaurants = searchRestaurants(_query);
-    });
+  void _searchRestaurants(String query) {
+    Provider.of<RestaurantProvider>(context, listen: false).searchRestaurants(query);
   }
 
   Widget header() {
@@ -59,10 +56,10 @@ class _HomePageState extends State<HomePage> {
               ),
               suffixIcon: IconButton(
                 icon: const Icon(Icons.search),
-                onPressed: _searchRestaurants,
+                onPressed: () => _searchRestaurants(_searchController.text),
               ),
             ),
-            onChanged: (value) => _searchRestaurants(),
+            onChanged: _searchRestaurants,
           ),
         ],
       ),
@@ -151,23 +148,23 @@ class _HomePageState extends State<HomePage> {
           children: [
             header(),
             Expanded(
-              child: FutureBuilder<Restaurants>(
-                future: _restaurants,
-                builder: (context, snapshot) {
-                  var state = snapshot.connectionState;
-                  if (state != ConnectionState.done) {
+              child: Consumer<RestaurantProvider>(
+                builder: (context, provider, child) {
+                  if (provider.state == ResultState.loading) {
                     return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasData) {
-                    if (snapshot.data!.restaurants.isEmpty) {
-                      return const Center(child: Text('No Data'));
-                    }
-                    return ListView(
-                      children: snapshot.data!.restaurants.map((restaurant) {
-                        return listItem(restaurant);
-                      }).toList(),
+                  } else if (provider.state == ResultState.hasData) {
+                    return ListView.builder(
+                      itemCount: provider.restaurants.length,
+                      itemBuilder: (context, index) {
+                        return listItem(provider.restaurants[index]);
+                      },
                     );
+                  } else if (provider.state == ResultState.noData) {
+                    return Center(child: Text(provider.message));
+                  } else if (provider.state == ResultState.error) {
+                    return Center(child: Text(provider.message));
                   } else {
-                    return const Center(child: Text('BELI KUOTA DI VIA PULSA !!!'));
+                    return const Center(child: Text(''));
                   }
                 },
               ),

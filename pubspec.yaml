@@ -36,6 +36,7 @@ dependencies:
   infinite_scroll_pagination: ^4.0.0
   http: ^1.2.1
   cupertino_icons: ^1.0.2
+  provider: ^6.0.3
 
 dev_dependencies:
   flutter_test:
